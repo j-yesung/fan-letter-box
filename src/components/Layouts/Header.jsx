@@ -9,7 +9,7 @@ const HeaderBox = styled.header`
 `;
 
 const Header = () => {
-  return <HeaderBox>Header</HeaderBox>;
+  return <HeaderBox>뉴진스</HeaderBox>;
 };
 
 export default Header;

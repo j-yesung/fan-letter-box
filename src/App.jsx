@@ -1,12 +1,16 @@
 import React from 'react';
-import Layout from 'components/Layouts/Layout';
+import Router from 'shared/Router';
+import Header from 'components/Layouts/Header';
+import Footer from 'components/Layouts/Footer';
 import GlobalStyle from 'components/Layouts/GlobalStyle';
 
 const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Layout></Layout>
+      <Header></Header>
+      <Router />
+      <Footer></Footer>
     </>
   );
 };
