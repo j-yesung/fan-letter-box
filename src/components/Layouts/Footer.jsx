@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 const FooterBox = styled.footer`
   grid-area: footer;
-  border: 2px solid black;
-  background-color: black;
-  color: white;
+  color: #ff2525;
+  bottom: 0;
+  margin: 20px;
 `;
 
 const Footer = () => {

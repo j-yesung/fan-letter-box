@@ -2,15 +2,14 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   #root {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 3fr;
-    grid-template-rows: 100px auto 50px;
-    grid-template-areas: 'header header' 'main main' 'footer footer';
+    display: flex;
+    background: #ffffff;
+    gap: 10px;
+    width: 100%;
+    height: 100wv;
+    flex-direction: column
   }
-  header, footer, main {
+  header, footer, main, section {
     display: flex;
     justify-content: center;
     align-items: center;
