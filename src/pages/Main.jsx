@@ -15,7 +15,7 @@ const Section = styled.section`
 `;
 
 const Main = () => {
-  console.log('Main 렌더링');
+  // console.log('Main 렌더링');
   const location = useLocation();
   const groupInfo = { ...location.state };
   const [data, setData] = useState([]);
@@ -43,12 +43,12 @@ const Main = () => {
   const handleSelectChange = e => {
     const selectedName = e.target.value;
     const selectedData = data.find(item => item.name === selectedName);
-    console.log('selectedName: ', selectedName, selectedData);
+    // console.log('selectedName: ', selectedName, selectedData);
 
     if (selectedName === '') return alert('이름을 선택해 주세요.');
     setSelectedOption(selectedData);
   };
-  console.log(selectedOption);
+  // console.log(selectedOption);
 
   return (
     <>

@@ -24,7 +24,7 @@ const ImgBox = styled.div`
 `;
 
 const MemberInfo = props => {
-  console.log('MemberInfo 렌더링');
+  // console.log('MemberInfo 렌더링');
   const [activeId, setActiveId] = useState(null);
   const navigate = useNavigate();
 
