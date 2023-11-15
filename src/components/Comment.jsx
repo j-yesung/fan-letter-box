@@ -1,42 +1,50 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import * as S from './Comment.styled.js';
+import * as S from './style/Comment.styled.js';
+import { SelectedContext } from 'context/SelectedContext.js';
 
 const Comment = props => {
+  const param = useParams();
+  const paramId = parseInt(param.id);
   const [comment, setComment] = useState([]);
+  const [isEditing, setIsEditing] = useState(null);
+  const [memberId, setMemberId] = useState(paramId);
 
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [editContent, setEditContent] = useState(''); // 수정 content 상태 값
-
-  const [isEditing, setIsEditing] = useState(null); // 수정 여부
-
-  // Ref로 텍스트 저장 (리렌더링 방지되고 좋음)
+  // Ref로 텍스트 저장 (리렌더링 방지)
   const nameRef = useRef('');
   const contentRef = useRef('');
   const editContentRef = useRef('');
 
-  const param = useParams();
-  const dataId = parseInt(props.data.groupInfo.id);
+  const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
 
-  console.log('렌더링');
+  const dataId = parseInt(props.data.memberInfo.id);
+  console.log('Comment 렌더링');
 
+  /**
+   * 로컬 스토리지 데이터 불러오기
+   * 항상 파라미터 ID 기준으로 댓글 목록 보여주기
+   */
   useEffect(() => {
     console.log('getItem');
-    if (dataId === parseInt(param.id)) {
-      const savedComment = localStorage.getItem(`comment_${dataId}`);
-      if (savedComment) {
-        setComment(JSON.parse(savedComment));
-      }
+    setMemberId(paramId);
+
+    // if (dataId === parseInt(param.id)) {
+    const savedComment = localStorage.getItem(`comment_${paramId}`);
+    if (savedComment) {
+      setComment(JSON.parse(savedComment));
     }
-  }, [dataId]);
+    // }
+  }, [paramId]);
 
+  // 로컬 스토리지 데이터 저장하기
   useEffect(() => {
+    console.log('등록할 때, 저장한 ID ===> ', memberId);
     console.log('setItem');
-    localStorage.setItem(`comment_${dataId}`, JSON.stringify(comment));
-  }, [dataId, comment]);
+    localStorage.setItem(`comment_${memberId}`, JSON.stringify(comment));
+  }, [comment]);
 
+  // 날짜 포맷팅
   const currentDate = new Date();
   const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
     .toString()
@@ -48,6 +56,10 @@ const Comment = props => {
     .toString()
     .padStart(2, '0')}`;
 
+  /**
+   * ADD
+   * @returns
+   */
   const handleClickAddComment = () => {
     const name = nameRef.current;
     const content = contentRef.current;
@@ -57,7 +69,8 @@ const Comment = props => {
       return alert('제목과 내용을 입력해 주세요.');
     }
 
-    if (dataId === parseInt(props.data.selectedOption.id)) {
+    // 파라미터 id가 달라도 등록하면 해당 comment_id로 이동
+    if (dataId === parseInt(param.id)) {
       const newComment = {
         id: uuidv4(),
         name,
@@ -67,6 +80,7 @@ const Comment = props => {
       };
 
       setComment(prevComment => [...prevComment, newComment]);
+      setMemberId(parseInt(selectedOption.id));
 
       // 인풋 값 초기화
       // nameRef.current.value = '';
@@ -77,7 +91,6 @@ const Comment = props => {
   };
 
   // TEXT 감지해서 등록 및 수정
-  // 입력할 때 마다, 리렌더링 되는데 해결 방법 찾는 중..
   const handleChangeText = e => {
     switch (e.target.name) {
       case 'name':
@@ -97,11 +110,11 @@ const Comment = props => {
     }
   };
 
-  // 삭제
+  // DELETE
   const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
 
   /**
-   * 수정 완료 버튼
+   * EDIT SUCCESS BUTTON
    * @param {*} id 선택한 댓글 item에서 가져온 id
    */
   const handleUpdateComment = id => {
@@ -112,7 +125,7 @@ const Comment = props => {
     setIsEditing(false);
   };
 
-  // 수정 버튼
+  // EDIT BUTTON
   const handleEditToggle = item => {
     setIsEditing(prevId => {
       if (prevId === item.id) {
@@ -123,11 +136,6 @@ const Comment = props => {
         return item.id;
       }
     });
-
-    if (isEditing !== item.id) {
-      console.log('text: ', item.content);
-      setEditContent(item.content);
-    }
   };
 
   return (
@@ -206,4 +214,4 @@ const Comment = props => {
   );
 };
 
-export default Comment;
+export default React.memo(Comment);
