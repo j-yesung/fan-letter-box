@@ -50,17 +50,17 @@ export const Ul = styled.ul`
   flex-direction: column;
   gap: 20px;
   width: 500px;
-  color: #000000;
+  color: black;
   justify-content: center;
 `;
 export const Li = styled.li`
   height: 125px;
-  color: white;
+  color: black;
   border: 2px solid black;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 10px;
-  background: #5e5e5e;
+  background: white;
 `;
 export const AddButtonWrap = styled.div`
   overflow: hidden;

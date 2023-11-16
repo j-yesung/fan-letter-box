@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { CommonContext } from 'context/CommonContext';
+import { SelectedContext } from 'context/SelectedContext';
 
 const ImgBox = styled.div`
   display: flex;
@@ -23,23 +25,26 @@ const ImgBox = styled.div`
   }
 `;
 
-const MemberInfo = props => {
-  // console.log('MemberInfo 렌더링');
-  const [activeId, setActiveId] = useState(null);
+const MemberInfo = () => {
+  const data = useContext(CommonContext);
   const navigate = useNavigate();
+  const [activeId, setActiveId] = useState(null);
+  const { setSelectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
 
+  // 민지 디폴트
   useEffect(() => {
-    setActiveId(1);
+    setActiveId('1');
   }, []);
 
   const goToContentPage = item => {
     setActiveId(item.id);
-    navigate(`/content/${item.id}`, { state: item });
+    setSelectedOption(data[item.id - 1]);
+    navigate(`/content/${item.id}`);
   };
   return (
     <>
-      {/* Main 컴포넌트 전용 버튼 */}
-      {props.data.map(item => {
+      {/* Main 컴포넌트 전용 이미지 버튼 */}
+      {data.map(item => {
         return (
           <ImgBox
             key={item.id}
@@ -53,4 +58,4 @@ const MemberInfo = props => {
   );
 };
 
-export default MemberInfo;
+export default React.memo(MemberInfo);

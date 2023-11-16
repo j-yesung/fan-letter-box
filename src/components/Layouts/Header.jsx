@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { SelectedContext } from 'context/SelectedContext';
+import { CommonContext } from 'context/CommonContext';
 
 const HeaderBox = styled.header`
   @font-face {
@@ -22,8 +23,11 @@ const HomeButton = styled.button`
 `;
 
 const Header = () => {
+  const data = useContext(CommonContext);
+  const { setSelectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
   const navigate = useNavigate();
   const goToHomePage = () => {
+    setSelectedOption(data[0]);
     navigate('/');
   };
 

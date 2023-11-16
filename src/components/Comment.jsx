@@ -4,21 +4,31 @@ import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
 import { SelectedContext } from 'context/SelectedContext.js';
 
-const Comment = props => {
+// 날짜 포맷팅
+const currentDate = new Date();
+export const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+  .toString()
+  .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')} ${currentDate
+  .getHours()
+  .toString()
+  .padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate
+  .getSeconds()
+  .toString()
+  .padStart(2, '0')}`;
+
+const Comment = () => {
   const param = useParams();
-  const paramId = parseInt(param.id);
+  const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id); // 파라미터 id 값 없으면 1 디폴트
   const [comment, setComment] = useState([]);
   const [isEditing, setIsEditing] = useState(null);
-  const [memberId, setMemberId] = useState(paramId);
 
-  // Ref로 텍스트 저장 (리렌더링 방지)
-  const nameRef = useRef('');
-  const contentRef = useRef('');
-  const editContentRef = useRef('');
+  const nameRef = useRef();
+  const contentRef = useRef();
+  const editContentRef = useRef();
 
   const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
+  console.log('------------------------- Comment SelectOption: ', selectedOption);
 
-  const dataId = parseInt(props.data.memberInfo.id);
   console.log('Comment 렌더링');
 
   /**
@@ -26,35 +36,18 @@ const Comment = props => {
    * 항상 파라미터 ID 기준으로 댓글 목록 보여주기
    */
   useEffect(() => {
-    console.log('getItem');
-    setMemberId(paramId);
-
-    // if (dataId === parseInt(param.id)) {
+    console.log('------------------------- getItem');
     const savedComment = localStorage.getItem(`comment_${paramId}`);
     if (savedComment) {
       setComment(JSON.parse(savedComment));
     }
-    // }
   }, [paramId]);
 
   // 로컬 스토리지 데이터 저장하기
   useEffect(() => {
-    console.log('등록할 때, 저장한 ID ===> ', memberId);
-    console.log('setItem');
-    localStorage.setItem(`comment_${memberId}`, JSON.stringify(comment));
-  }, [comment]);
-
-  // 날짜 포맷팅
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')} ${currentDate
-    .getHours()
-    .toString()
-    .padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate
-    .getSeconds()
-    .toString()
-    .padStart(2, '0')}`;
+    console.log('------------------------- setItem');
+    localStorage.setItem(`comment_${paramId}`, JSON.stringify(comment));
+  }, [paramId, comment]);
 
   /**
    * ADD
@@ -63,28 +56,25 @@ const Comment = props => {
   const handleClickAddComment = () => {
     const name = nameRef.current;
     const content = contentRef.current;
-
-    if (name === '' || content === '') {
+    if (name.value === '' || content.value === '') {
       name.focus();
       return alert('제목과 내용을 입력해 주세요.');
     }
 
-    // 파라미터 id가 달라도 등록하면 해당 comment_id로 이동
-    if (dataId === parseInt(param.id)) {
+    if (parseInt(selectedOption.id) === paramId) {
       const newComment = {
         id: uuidv4(),
-        name,
-        content,
+        name: name.value,
+        content: content.value,
         date: formattedDate,
         isEditing,
       };
 
       setComment(prevComment => [...prevComment, newComment]);
-      setMemberId(parseInt(selectedOption.id));
 
       // 인풋 값 초기화
-      // nameRef.current.value = '';
-      // contentRef.current.value = '';
+      nameRef.current.value = '';
+      contentRef.current.value = '';
     } else {
       return alert('이름 다시 선택해주셈');
     }
@@ -95,15 +85,15 @@ const Comment = props => {
     switch (e.target.name) {
       case 'name':
         if (e.target.value.length > 20) return alert('20글자 이하로 작성해 주세요.');
-        nameRef.current = e.target.value;
+        nameRef.current.value = e.target.value;
         break;
       case 'content':
         if (e.target.value.length > 100) return alert('100글자 이하로 작성해 주세요.');
-        contentRef.current = e.target.value;
+        contentRef.current.value = e.target.value;
         break;
       case 'editContent':
         if (e.target.value > 100) return alert('100글자 이하로 작성해 주세요.');
-        editContentRef.current = e.target.value;
+        editContentRef.current.value = e.target.value;
         break;
       default:
         break;
@@ -112,14 +102,13 @@ const Comment = props => {
 
   // DELETE
   const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
-
   /**
    * EDIT SUCCESS BUTTON
    * @param {*} id 선택한 댓글 item에서 가져온 id
    */
   const handleUpdateComment = id => {
     const updateComment = comment.map(item =>
-      item.id === id ? { ...item, content: editContentRef.current, date: formattedDate } : item,
+      item.id === id ? { ...item, content: editContentRef.current.value, date: formattedDate } : item,
     );
     setComment(updateComment);
     setIsEditing(false);
@@ -167,6 +156,7 @@ const Comment = props => {
           <S.AddButton onClick={handleClickAddComment}>등록</S.AddButton>
         </S.AddButtonWrap>
       </S.Form>
+      {/* <Form date={formattedDate} /> */}
       <div>
         <S.Ul>
           {comment.map(item => (
@@ -180,6 +170,7 @@ const Comment = props => {
                   {isEditing === item.id ? (
                     // 수정할 때..
                     <S.UpdateTextArea
+                      ref={editContentRef}
                       key={item.id}
                       name="editContent"
                       placeholder="내용"
