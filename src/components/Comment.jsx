@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
-import { SelectedContext } from 'context/SelectedContext.js';
+import { useDispatch, useSelector } from 'react-redux';
+// import { SelectedContext } from 'context/SelectedContext.js';
 
 // 날짜 포맷팅
 const currentDate = new Date();
@@ -26,17 +27,20 @@ const Comment = () => {
   const contentRef = useRef();
   const editContentRef = useRef();
 
-  const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
-  console.log('------------------------- Comment SelectOption: ', selectedOption);
+  const selectedData = useSelector(state => state.fanLetter.selectedData);
+  // const dispatch = useDispatch();
 
-  console.log('Comment 렌더링');
+  // const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
+  console.log('------------------------- Comment selectedData: ', selectedData);
+
+  // console.log('Comment 렌더링');
 
   /**
    * 로컬 스토리지 데이터 불러오기
    * 항상 파라미터 ID 기준으로 댓글 목록 보여주기
    */
   useEffect(() => {
-    console.log('------------------------- getItem');
+    // console.log('------------------------- getItem');
     const savedComment = localStorage.getItem(`comment_${paramId}`);
     if (savedComment) {
       setComment(JSON.parse(savedComment));
@@ -45,12 +49,12 @@ const Comment = () => {
 
   // 로컬 스토리지 데이터 저장하기
   useEffect(() => {
-    console.log('------------------------- setItem');
+    // console.log('------------------------- setItem');
     localStorage.setItem(`comment_${paramId}`, JSON.stringify(comment));
   }, [paramId, comment]);
 
   /**
-   * ADD
+   * 팬레터 추가하기
    * @returns
    */
   const handleClickAddComment = () => {
@@ -61,7 +65,7 @@ const Comment = () => {
       return alert('제목과 내용을 입력해 주세요.');
     }
 
-    if (parseInt(selectedOption.id) === paramId) {
+    if (parseInt(selectedData.id) === paramId) {
       const newComment = {
         id: uuidv4(),
         name: name.value,
@@ -129,78 +133,107 @@ const Comment = () => {
 
   return (
     <>
-      <S.Form>
-        <S.WriteBox>
-          <S.Label>닉네임 :</S.Label>
-          <S.Input
-            ref={nameRef}
-            type="text"
-            name="name"
-            placeholder="닉네임"
-            defaultValue=""
-            onChange={handleChangeText}
-          />
-        </S.WriteBox>
-        <S.WriteBox>
-          <S.Label>내용 :</S.Label>
-          <S.TextArea
-            ref={contentRef}
-            placeholder="내용"
-            name="content"
-            defaultValue=""
-            maxLength="100"
-            onChange={handleChangeText}
-          ></S.TextArea>
-        </S.WriteBox>
-        <S.AddButtonWrap>
-          <S.AddButton onClick={handleClickAddComment}>등록</S.AddButton>
-        </S.AddButtonWrap>
-      </S.Form>
-      {/* <Form date={formattedDate} /> */}
-      <div>
-        <S.Ul>
-          {comment.map(item => (
-            <div key={item.id}>
-              <S.Li>
-                <S.UserIcon src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" />
-                <S.LiLabel>
-                  <div>{item.name}</div>
-                  <div>{item.date}</div>
+      <S.FORM_WARPPER>
+        <S.Form>
+          <S.TEXT_BOX>
+            <S.Label>닉네임 :</S.Label>
+            <S.Input
+              ref={nameRef}
+              type="text"
+              name="name"
+              placeholder="닉네임"
+              defaultValue=""
+              onChange={handleChangeText}
+            />
+          </S.TEXT_BOX>
+          <S.TEXT_BOX>
+            <S.Label>내용 :</S.Label>
+            <S.TextArea
+              ref={contentRef}
+              placeholder="내용"
+              name="content"
+              defaultValue=""
+              maxLength="100"
+              onChange={handleChangeText}
+            ></S.TextArea>
+          </S.TEXT_BOX>
+          <S.ButtonWrap>
+            <S.Button color={'#42adff'} border={'#42adff'} backcolor={'#42adff'} onClick={handleClickAddComment}>
+              등록
+            </S.Button>
+          </S.ButtonWrap>
+        </S.Form>
+      </S.FORM_WARPPER>
+      <S.Ul>
+        {comment.map(item => (
+          <div key={item.id}>
+            <S.Li>
+              <S.UserIcon src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" />
+              <S.LiLabel>
+                <p>{item.name}</p>
+                <p>{item.date}</p>
 
-                  {isEditing === item.id ? (
-                    // 수정할 때..
-                    <S.UpdateTextArea
-                      ref={editContentRef}
-                      key={item.id}
-                      name="editContent"
-                      placeholder="내용"
-                      maxLength="100"
-                      defaultValue={item.content}
-                      onChange={handleChangeText}
-                    ></S.UpdateTextArea>
-                  ) : (
-                    // 수정 안 할 때..
-                    <S.AddTextArea value={item.content} disabled></S.AddTextArea>
-                  )}
-                </S.LiLabel>
-              </S.Li>
+                {isEditing === item.id ? (
+                  // 수정할 때..
+                  <S.UpdateTextArea
+                    ref={editContentRef}
+                    key={item.id}
+                    name="editContent"
+                    placeholder="내용"
+                    maxLength="100"
+                    defaultValue={item.content}
+                    onChange={handleChangeText}
+                  ></S.UpdateTextArea>
+                ) : (
+                  // 수정 안 할 때..
+                  <S.AddTextArea value={item.content} disabled></S.AddTextArea>
+                )}
+              </S.LiLabel>
               {isEditing === item.id ? (
                 // 수정 중인 댓글의 경우 수정 완료 버튼 보여줌
-                <S.UpdateButtonWrap>
-                  <S.DeleteButton onClick={() => handleDeleteComment(item.id)}>삭제</S.DeleteButton>
-                  <S.EditButton onClick={() => handleUpdateComment(item.id)}>수정 완료</S.EditButton>
-                </S.UpdateButtonWrap>
+                <S.ButtonWrap>
+                  <S.Button
+                    color={'#ff4742'}
+                    border={'#ff4742'}
+                    backcolor={'#ff4742'}
+                    onClick={() => handleDeleteComment(item.id)}
+                  >
+                    삭제
+                  </S.Button>
+                  <S.Button
+                    color={'#49da59'}
+                    border={'#49da59'}
+                    backcolor={'#49da59'}
+                    onClick={() => handleUpdateComment(item.id)}
+                  >
+                    수정 완료
+                  </S.Button>
+                </S.ButtonWrap>
               ) : (
                 // 수정 중이 아닌 경우 수정 버튼 보여줌
-                <S.UpdateButtonWrap>
-                  <S.DeleteButton onClick={() => handleDeleteComment(item.id)}>삭제</S.DeleteButton>
-                  <S.EditButton onClick={() => handleEditToggle(item)}>수정</S.EditButton>
-                </S.UpdateButtonWrap>
+                <S.ButtonWrap>
+                  <S.Button
+                    color={'#ff4742'}
+                    border={'#ff4742'}
+                    backcolor={'#ff4742'}
+                    onClick={() => handleDeleteComment(item.id)}
+                  >
+                    삭제
+                  </S.Button>
+                  <S.Button
+                    color={'#49da59'}
+                    border={'#49da59'}
+                    backcolor={'#49da59'}
+                    onClick={() => handleEditToggle(item)}
+                  >
+                    수정
+                  </S.Button>
+                </S.ButtonWrap>
               )}
-            </div>
-          ))}
-        </S.Ul>
-      </div>
+            </S.Li>
+          </div>
+        ))}
+      </S.Ul>
     </>
   );
 };

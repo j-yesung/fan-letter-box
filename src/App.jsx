@@ -1,34 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import Router from 'shared/Router';
 import GlobalStyle from 'components/Layouts/GlobalStyle';
-import { CommonContext } from 'context/CommonContext';
+import { useDispatch } from 'react-redux';
+import fakeData from 'data/fakeData.json'; // json은 웹팩이 일을 안 해줌
+import { getJsonData } from 'modules/fanLetter';
 
 const App = () => {
-  const [data, setData] = useState([]);
-
-  const fetchJsonData = async url => {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('not ok..');
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const JSON_URL = '/fakeData.json';
-
-    fetchJsonData(JSON_URL)
-      .then(data => setData(data))
-      .catch(error => console.error('error:', error));
-  }, []);
+    dispatch(getJsonData(fakeData));
+  }, [dispatch]);
 
   return (
     <>
-      <CommonContext.Provider value={data}>
-        <GlobalStyle />
-        <Router />
-      </CommonContext.Provider>
+      <GlobalStyle />
+      <Router />
     </>
   );
 };

@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const FORM_WARPPER = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
 export const Form = styled.div`
   height: 210px;
   display: flex;
@@ -8,7 +13,7 @@ export const Form = styled.div`
   color: #000000;
   padding: 20px;
 `;
-export const WriteBox = styled.div`
+export const TEXT_BOX = styled.div`
   display: flex;
 `;
 export const Label = styled.label`
@@ -29,21 +34,45 @@ export const UpdateTextArea = styled.textarea`
   width: 350px;
   height: 40px;
 `;
-// ----------------------
+
+// 버튼
+export const ButtonWrap = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;
+export const Button = styled.button`
+  float: right;
+  display: inline-block;
+  outline: 0;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 4px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1.5px 0px;
+  font-weight: 800;
+  font-size: 16px;
+  height: 36px;
+  margin-left: 10px;
+  border: 2px solid ${props => props.border};
+  color: #fff;
+  background-color: ${props => props.backcolor};
+
+  &:hover {
+    background: 0 0;
+    color: ${props => props.color};
+  }
+`;
 // 댓글 뿌리는 영역
+export const COMMENT_WARP = styled.div``;
+
 export const UserIcon = styled.img`
-  top: 30px;
   width: 100px;
-  height: 100px;
-  margin-right: 10px;
+  float: left;
 `;
 export const LiLabel = styled.label`
   display: flex;
   gap: 5px;
   flex-direction: column;
-  position: relative;
-  left: 120px;
-  bottom: 93px;
+  margin: 10px;
 `;
 export const Ul = styled.ul`
   display: flex;
@@ -54,7 +83,11 @@ export const Ul = styled.ul`
   justify-content: center;
 `;
 export const Li = styled.li`
-  height: 125px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 160px;
   color: black;
   border: 2px solid black;
   cursor: pointer;
@@ -62,74 +95,7 @@ export const Li = styled.li`
   padding: 10px;
   background: white;
 `;
-export const AddButtonWrap = styled.div`
-  overflow: hidden;
-`;
-export const AddButton = styled.button`
-  float: right;
-  display: inline-block;
-  outline: 0;
-  cursor: pointer;
-  border-radius: 6px;
-  border: 2px solid #42adff;
-  color: #fff;
-  background-color: #42adff;
-  padding: 8px;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 4px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1.5px 0px;
-  font-weight: 800;
-  font-size: 16px;
-  height: 36px;
 
-  &:hover {
-    background: 0 0;
-    color: #42adff;
-  }
-`;
-export const UpdateButtonWrap = styled.div`
-  overflow: hidden;
-  margin-top: 10px;
-`;
-export const DeleteButton = styled.button`
-  float: right;
-  display: inline-block;
-  outline: 0;
-  cursor: pointer;
-  border-radius: 6px;
-  border: 2px solid #ff4742;
-  color: #fff;
-  background-color: #ff4742;
-  padding: 8px;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 4px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1.5px 0px;
-  font-weight: 800;
-  font-size: 16px;
-  height: 36px;
-
-  &:hover {
-    background: 0 0;
-    color: #ff4742;
-  }
-`;
-export const EditButton = styled.button`
-  float: right;
-  margin-right: 5px;
-  display: inline-block;
-  outline: 0;
-  cursor: pointer;
-  border-radius: 6px;
-  border: 2px solid #49da59;
-  color: #fff;
-  background-color: #49da59;
-  padding: 8px;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 4px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1.5px 0px;
-  font-weight: 800;
-  font-size: 16px;
-  height: 36px;
-
-  &:hover {
-    background: 0 0;
-    color: #49da59;
-  }
-`;
 export const AddTextArea = styled.textarea`
   width: 350px;
   height: 40px;

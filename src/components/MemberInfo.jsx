@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { CommonContext } from 'context/CommonContext';
-import { SelectedContext } from 'context/SelectedContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectedData } from 'modules/fanLetter';
 
 const ImgBox = styled.div`
   display: flex;
@@ -26,10 +26,10 @@ const ImgBox = styled.div`
 `;
 
 const MemberInfo = () => {
-  const data = useContext(CommonContext);
-  const navigate = useNavigate();
+  const fanLetter = useSelector(state => state.fanLetter);
   const [activeId, setActiveId] = useState(null);
-  const { setSelectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 민지 디폴트
   useEffect(() => {
@@ -38,13 +38,14 @@ const MemberInfo = () => {
 
   const goToContentPage = item => {
     setActiveId(item.id);
-    setSelectedOption(data[item.id - 1]);
+    dispatch(selectedData(fanLetter.data[item.id - 1]));
     navigate(`/content/${item.id}`);
   };
+
   return (
     <>
       {/* Main 컴포넌트 전용 이미지 버튼 */}
-      {data.map(item => {
+      {fanLetter.data.map(item => {
         return (
           <ImgBox
             key={item.id}

@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { SelectedContext } from 'context/SelectedContext';
-import { CommonContext } from 'context/CommonContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectedData } from 'modules/fanLetter';
 
 const HeaderBox = styled.header`
   @font-face {
@@ -23,11 +22,12 @@ const HomeButton = styled.button`
 `;
 
 const Header = () => {
-  const data = useContext(CommonContext);
-  const { setSelectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
+  const fanLetter = useSelector(state => state.fanLetter);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const goToHomePage = () => {
-    setSelectedOption(data[0]);
+    dispatch(selectedData(fanLetter.data[0]));
     navigate('/');
   };
 
