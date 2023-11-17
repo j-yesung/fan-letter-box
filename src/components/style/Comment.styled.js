@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-export const FORM_WARPPER = styled.div`
+export const FORM_WRAPPER = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
 `;
 export const Form = styled.div`
-  height: 210px;
+  height: 230px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -15,6 +15,7 @@ export const Form = styled.div`
 `;
 export const TEXT_BOX = styled.div`
   display: flex;
+  position: relative;
 `;
 export const Label = styled.label`
   width: 100px;
@@ -22,7 +23,44 @@ export const Label = styled.label`
   align-items: center;
 `;
 export const Input = styled.input`
-  width: 100%;
+  /* width: 100%; */
+  font-weight: 500;
+  font-size: 1.6rem;
+  color: #495055;
+  width: 500px;
+  padding: 15px 15px;
+  border-radius: 1rem;
+  border: 2px solid #d9d9d9;
+  outline: none;
+
+  &:focus {
+    color: #284b63;
+    border-color: #284b63;
+  }
+`;
+export const Placeholder = styled.span`
+  position: absolute;
+  margin: 17px 0;
+  padding: 0 4px;
+  font-family: Roboto, sans-serif;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  top: 0;
+  left: 17px;
+  transition: all 0.2s;
+  transform-origin: 0% 0%;
+  background: none;
+  pointer-events: none;
+
+  ${props =>
+    props.$isActive &&
+    `
+    transform: scale(0.8) translateY(-30px);
+    background: #fff;
+    color: #284B63;
+  `}
 `;
 export const TextArea = styled.textarea`
   resize: none;
@@ -89,7 +127,7 @@ export const Li = styled.li`
   width: 100%;
   height: 160px;
   color: black;
-  border: 2px solid black;
+  border: 2px solid ${({ theme }) => theme.borderColor};
   cursor: pointer;
   border-radius: 15px;
   padding: 10px;

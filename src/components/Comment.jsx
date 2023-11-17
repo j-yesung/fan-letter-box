@@ -27,6 +27,10 @@ const Comment = () => {
   const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id);
   const [comment, setComment] = useState([]);
   const [isEditing, setIsEditing] = useState(true);
+  const [isInputActive, setInputActive] = useState({
+    name: false,
+    content: false,
+  });
 
   const nameRef = useRef();
   const contentRef = useRef();
@@ -61,7 +65,7 @@ const Comment = () => {
     const content = contentRef.current;
     if (name.value === '' || content.value === '') {
       name.focus();
-      return alert('제목과 내용을 입력해 주세요.');
+      return alert('빈칸을 입력해 주세요.');
     }
 
     if (parseInt(selectedData.id) === paramId) {
@@ -79,7 +83,7 @@ const Comment = () => {
       nameRef.current.value = '';
       contentRef.current.value = '';
     } else {
-      return alert('이름 다시 선택해주셈');
+      return alert('이름을 다시 선택해 주세요.');
     }
   };
 
@@ -118,31 +122,43 @@ const Comment = () => {
     setIsEditing(true);
   };
 
+  const handleInputFocus = fieldName => setInputActive({ ...isInputActive, [fieldName]: true });
+  const handleInputBlur = (e, fieldName) =>
+    !e.target.value
+      ? setInputActive({ ...isInputActive, [fieldName]: false })
+      : setInputActive({ ...isInputActive, [fieldName]: true });
+
   return (
     <>
-      <S.FORM_WARPPER>
+      <S.FORM_WRAPPER>
         <S.Form>
           <S.TEXT_BOX>
-            <S.Label>닉네임 :</S.Label>
             <S.Input
               ref={nameRef}
               type="text"
               name="name"
-              placeholder="최대 20글자까지 작성할 수 있습니다."
+              // placeholder="최대 20글자까지 작성할 수 있습니다."
+              required
+              spellCheck="false"
               defaultValue=""
               onChange={handleChangeText}
+              onFocus={() => handleInputFocus('name')}
+              onBlur={e => handleInputBlur(e, 'name')}
             />
+            <S.Placeholder $isActive={isInputActive.name}>닉네임</S.Placeholder>
           </S.TEXT_BOX>
           <S.TEXT_BOX>
-            <S.Label>내용 :</S.Label>
-            <S.TextArea
+            <S.Input
               ref={contentRef}
-              placeholder="최대 100자까지만 작성할 수 있습니다."
+              // placeholder="최대 100자까지만 작성할 수 있습니다."
               name="content"
               defaultValue=""
               maxLength="100"
               onChange={handleChangeText}
-            ></S.TextArea>
+              onFocus={() => handleInputFocus('content')}
+              onBlur={e => handleInputBlur(e, 'content')}
+            />
+            <S.Placeholder $isActive={isInputActive.content}>내용</S.Placeholder>
           </S.TEXT_BOX>
           <S.ButtonWrap>
             <S.Button color={'#42adff'} border={'#42adff'} backcolor={'#42adff'} onClick={handleClickAddComment}>
