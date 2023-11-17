@@ -5,6 +5,7 @@ import { isActive, isMode, selectedData } from 'modules/fanLetter';
 import { darkTheme, lightTheme } from 'components/style/theme';
 import { useEffect } from 'react';
 import * as S from '../style/Comment.styled';
+import { Link } from 'react-router-dom';
 
 const HEADER_BOX = styled.header`
   @font-face {
@@ -66,7 +67,9 @@ const Header = () => {
   return (
     <HEADER_BOX>
       <HOME_BUTTON onClick={goToHomePage}></HOME_BUTTON>
-      New Jeans
+      <Link to="/" onClick={goToHomePage}>
+        New Jeans
+      </Link>
       <MODE_BUTTON onClick={toggleTheme}>
         {fanLetter.isMode === darkTheme ? lightTheme.modeText : darkTheme.modeText}
       </MODE_BUTTON>
