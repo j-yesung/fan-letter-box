@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 export const FORM_WRAPPER = styled.div`
   display: flex;
@@ -24,7 +25,6 @@ export const Label = styled.label`
   align-items: center;
 `;
 export const Input = styled.input`
-  /* width: 100%; */
   font-weight: 500;
   font-size: 1.6rem;
   color: #495055;
@@ -92,13 +92,12 @@ export const Button = styled.button`
   font-size: 16px;
   height: 36px;
   margin-left: 10px;
-  border: 2px solid ${props => props.border};
+  border: 2px solid ${props => props.buttonColor};
   color: #fff;
-  background-color: ${props => props.backcolor};
-
+  background-color: ${props => props.buttonColor};
   &:hover {
     background: 0 0;
-    color: ${props => props.color};
+    color: ${props => props.buttonColor};
   }
 `;
 // 댓글 뿌리는 영역
