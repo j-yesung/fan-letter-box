@@ -1,21 +1,26 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
-import { useDispatch, useSelector } from 'react-redux';
-// import { SelectedContext } from 'context/SelectedContext.js';
+import { useSelector } from 'react-redux';
 
 // 날짜 포맷팅
-const currentDate = new Date();
-export const formattedDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-  .toString()
-  .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')} ${currentDate
-  .getHours()
-  .toString()
-  .padStart(2, '0')}:${currentDate.getMinutes().toString().padStart(2, '0')}:${currentDate
-  .getSeconds()
-  .toString()
-  .padStart(2, '0')}`;
+export const formattedDate = () => {
+  var date = new Date();
+
+  var hours = date.getHours();
+  var ampm = hours >= 12 ? '오후' : '오전';
+  hours = hours % 12;
+
+  var formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(
+    date.getDate(),
+  ).padStart(2, '0')}. `;
+  formattedDate += `${ampm} ${String(hours).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
+    date.getSeconds(),
+  ).padStart(2, '0')}`;
+
+  return formattedDate;
+};
 
 const Comment = () => {
   const param = useParams();
@@ -70,7 +75,7 @@ const Comment = () => {
         id: uuidv4(),
         name: name.value,
         content: content.value,
-        date: formattedDate,
+        date: formattedDate(),
         isEditing,
       };
 
@@ -112,7 +117,7 @@ const Comment = () => {
    */
   const handleUpdateComment = id => {
     const updateComment = comment.map(item =>
-      item.id === id ? { ...item, content: editContentRef.current.value, date: formattedDate } : item,
+      item.id === id ? { ...item, content: editContentRef.current.value, date: formattedDate() } : item,
     );
     setComment(updateComment);
     setIsEditing(false);
