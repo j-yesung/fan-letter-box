@@ -24,28 +24,23 @@ export const formattedDate = () => {
 
 const Comment = () => {
   const param = useParams();
-  const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id); // 파라미터 id 값 없으면 1 디폴트
+  const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id);
   const [comment, setComment] = useState([]);
-  const [isEditing, setIsEditing] = useState(null);
+  const [isEditing, setIsEditing] = useState(true);
 
   const nameRef = useRef();
   const contentRef = useRef();
   const editContentRef = useRef();
 
   const selectedData = useSelector(state => state.fanLetter.selectedData);
-  // const dispatch = useDispatch();
 
   // const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
-  console.log('------------------------- Comment selectedData: ', selectedData);
-
-  // console.log('Comment 렌더링');
 
   /**
    * 로컬 스토리지 데이터 불러오기
    * 항상 파라미터 ID 기준으로 댓글 목록 보여주기
    */
   useEffect(() => {
-    // console.log('------------------------- getItem');
     const savedComment = localStorage.getItem(`comment_${paramId}`);
     if (savedComment) {
       setComment(JSON.parse(savedComment));
@@ -54,7 +49,6 @@ const Comment = () => {
 
   // 로컬 스토리지 데이터 저장하기
   useEffect(() => {
-    // console.log('------------------------- setItem');
     localStorage.setItem(`comment_${paramId}`, JSON.stringify(comment));
   }, [paramId, comment]);
 
@@ -76,7 +70,7 @@ const Comment = () => {
         name: name.value,
         content: content.value,
         date: formattedDate(),
-        isEditing,
+        isEditing: false,
       };
 
       setComment(prevComment => [...prevComment, newComment]);
@@ -109,31 +103,19 @@ const Comment = () => {
     }
   };
 
-  // DELETE
+  // 삭제
   const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
-  /**
-   * EDIT SUCCESS BUTTON
-   * @param {*} id 선택한 댓글 item에서 가져온 id
-   */
+
+  // 수정
+  const handleEditToggle = item => setIsEditing(isEditing => (isEditing === item.isEditing ? true : false));
+
+  // 수정 완료
   const handleUpdateComment = id => {
     const updateComment = comment.map(item =>
       item.id === id ? { ...item, content: editContentRef.current.value, date: formattedDate() } : item,
     );
     setComment(updateComment);
-    setIsEditing(false);
-  };
-
-  // EDIT BUTTON
-  const handleEditToggle = item => {
-    setIsEditing(prevId => {
-      if (prevId === item.id) {
-        // 이미 수정 중인 댓글이면 null을 반환하여 수정 종료
-        return null;
-      } else {
-        // 수정 중인 댓글이 아니면 해당 댓글의 id를 return
-        return item.id;
-      }
-    });
+    setIsEditing(true);
   };
 
   return (
@@ -146,7 +128,7 @@ const Comment = () => {
               ref={nameRef}
               type="text"
               name="name"
-              placeholder="닉네임"
+              placeholder="최대 20글자까지 작성할 수 있습니다."
               defaultValue=""
               onChange={handleChangeText}
             />
@@ -155,7 +137,7 @@ const Comment = () => {
             <S.Label>내용 :</S.Label>
             <S.TextArea
               ref={contentRef}
-              placeholder="내용"
+              placeholder="최대 100자까지만 작성할 수 있습니다."
               name="content"
               defaultValue=""
               maxLength="100"
@@ -178,7 +160,7 @@ const Comment = () => {
                 <p>{item.name}</p>
                 <p>{item.date}</p>
 
-                {isEditing === item.id ? (
+                {isEditing === item.isEditing ? (
                   // 수정할 때..
                   <S.UpdateTextArea
                     ref={editContentRef}
@@ -190,12 +172,10 @@ const Comment = () => {
                     onChange={handleChangeText}
                   ></S.UpdateTextArea>
                 ) : (
-                  // 수정 안 할 때..
-                  <S.AddTextArea value={item.content} disabled></S.AddTextArea>
+                  <p>{item.content}</p>
                 )}
               </S.LiLabel>
-              {isEditing === item.id ? (
-                // 수정 중인 댓글의 경우 수정 완료 버튼 보여줌
+              {isEditing === item.isEditing ? (
                 <S.ButtonWrap>
                   <S.Button
                     color={'#ff4742'}
@@ -215,7 +195,6 @@ const Comment = () => {
                   </S.Button>
                 </S.ButtonWrap>
               ) : (
-                // 수정 중이 아닌 경우 수정 버튼 보여줌
                 <S.ButtonWrap>
                   <S.Button
                     color={'#ff4742'}
