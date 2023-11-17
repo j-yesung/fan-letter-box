@@ -6,16 +6,17 @@ export const FORM_WRAPPER = styled.div`
   width: 100%;
 `;
 export const Form = styled.div`
-  height: 230px;
+  height: 270px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   color: #000000;
   padding: 20px;
 `;
 export const TEXT_BOX = styled.div`
   display: flex;
   position: relative;
+  margin-bottom: 10px;
 `;
 export const Label = styled.label`
   width: 100px;
@@ -32,18 +33,19 @@ export const Input = styled.input`
   border-radius: 1rem;
   border: 2px solid #d9d9d9;
   outline: none;
+  background-color: ${({ theme }) => theme.bgColor};
 
   &:focus {
-    color: #284b63;
-    border-color: #284b63;
+    color: ${({ theme }) => theme.textColor};
+    border-color: #d9d9d9;
   }
 `;
 export const Placeholder = styled.span`
   position: absolute;
   margin: 17px 0;
-  padding: 0 4px;
+  padding: 1 4px;
   font-family: Roboto, sans-serif;
-  color: #6c757d;
+  color: ${({ theme }) => theme.textColor};
   display: flex;
   align-items: center;
   font-size: 1.6rem;
@@ -57,9 +59,9 @@ export const Placeholder = styled.span`
   ${props =>
     props.$isActive &&
     `
-    transform: scale(0.8) translateY(-30px);
-    background: #fff;
-    color: #284B63;
+    transform: scale(0.8) translateY(-50px);
+    background: ${({ theme }) => theme.bgColor};
+    border-radius: 5px;
   `}
 `;
 export const TextArea = styled.textarea`

@@ -1,7 +1,7 @@
 export const lightTheme = {
   bgColor: 'white',
   textColor: '#212121',
-  borderColor: '#212121',
+  borderColor: '#d9d9d9',
   buttonColor: '#212121',
   buttonTextColor: 'white',
   invertFilter: 'invert(0%)',
@@ -10,7 +10,7 @@ export const lightTheme = {
 export const darkTheme = {
   bgColor: '#212121',
   textColor: 'white',
-  borderColor: 'white',
+  borderColor: '#d9d9d9',
   buttonColor: 'white',
   buttonTextColor: '#212121',
   invertFilter: 'invert(100%)',
