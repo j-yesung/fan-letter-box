@@ -9,6 +9,14 @@ const MainContainer = styled.main`
   transition: 0.25s;
 `;
 const Section = styled.section`
+  @font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  font-family: 'NanumSquareNeo-Variable';
   display: flex;
   flex-direction: column;
 `;

@@ -9,7 +9,7 @@ const FooterBox = styled.footer`
 `;
 
 const Footer = () => {
-  return <FooterBox>Footer</FooterBox>;
+  return <FooterBox></FooterBox>;
 };
 
 export default Footer;

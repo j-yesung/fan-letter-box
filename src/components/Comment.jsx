@@ -9,13 +9,13 @@ export const formattedDate = () => {
   var date = new Date();
 
   var hours = date.getHours();
-  var ampm = hours >= 12 ? '오후' : '오전';
+  var amps = hours >= 12 ? '오후' : '오전';
   hours = hours % 12;
 
   var formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(
     date.getDate(),
   ).padStart(2, '0')}. `;
-  formattedDate += `${ampm} ${String(hours).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
+  formattedDate += `${amps} ${String(hours).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
     date.getSeconds(),
   ).padStart(2, '0')}`;
 
@@ -38,12 +38,7 @@ const Comment = () => {
 
   const selectedData = useSelector(state => state.fanLetter.selectedData);
 
-  // const { selectedOption } = useContext(SelectedContext); // 셀럭트 옵션 값
-
-  /**
-   * 로컬 스토리지 데이터 불러오기
-   * 항상 파라미터 ID 기준으로 댓글 목록 보여주기
-   */
+  // 로컬 스토리지 데이터 불러오기
   useEffect(() => {
     const savedComment = localStorage.getItem(`comment_${paramId}`);
     if (savedComment) {
@@ -56,10 +51,7 @@ const Comment = () => {
     localStorage.setItem(`comment_${paramId}`, JSON.stringify(comment));
   }, [paramId, comment]);
 
-  /**
-   * 팬레터 추가하기
-   * @returns
-   */
+  // 등록
   const handleClickAddComment = () => {
     const name = nameRef.current;
     const content = contentRef.current;
@@ -166,7 +158,8 @@ const Comment = () => {
             </S.Button>
           </S.ButtonWrap>
         </S.Form>
-      </S.FORM_WARPPER>
+      </S.FORM_WRAPPER>
+
       <S.Ul>
         {comment.map(item => (
           <div key={item.id}>
