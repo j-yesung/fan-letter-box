@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedData } from 'modules/fanLetter';
+import { isActive, selectedData } from 'modules/fanLetter';
 
 const ImgBox = styled.div`
   display: flex;
@@ -27,17 +27,17 @@ const ImgBox = styled.div`
 
 const MemberInfo = () => {
   const fanLetter = useSelector(state => state.fanLetter);
-  const [activeId, setActiveId] = useState(null);
+  console.log('fanLetter: ', fanLetter);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 민지 디폴트
   useEffect(() => {
-    setActiveId('1');
+    dispatch(isActive('1'));
   }, []);
 
   const goToContentPage = item => {
-    setActiveId(item.id);
+    dispatch(isActive(item.id));
     dispatch(selectedData(fanLetter.data[item.id - 1]));
     navigate(`/content/${item.id}`);
   };
@@ -50,7 +50,7 @@ const MemberInfo = () => {
           <ImgBox
             key={item.id}
             $img={item.img}
-            $isActive={activeId === item.id}
+            $isActive={fanLetter.isActive === item.id}
             onClick={() => goToContentPage(item)}
           ></ImgBox>
         );
