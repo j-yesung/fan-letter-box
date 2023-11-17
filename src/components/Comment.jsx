@@ -103,15 +103,22 @@ const Comment = () => {
   const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
 
   // 수정
-  const handleEditToggle = item => setIsEditing(isEditing => (isEditing === item.isEditing ? true : false));
+  const handleEditToggle = id => {
+    setComment(prevComments =>
+      prevComments.map(commentItem =>
+        commentItem.id === id ? { ...commentItem, isEditing: !commentItem.isEditing } : commentItem,
+      ),
+    );
+  };
 
   // 수정 완료
   const handleUpdateComment = id => {
     const updateComment = comment.map(item =>
-      item.id === id ? { ...item, content: editContentRef.current.value, date: formattedDate() } : item,
+      item.id === id
+        ? { ...item, content: editContentRef.current.value, date: formattedDate(), isEditing: false }
+        : item,
     );
     setComment(updateComment);
-    setIsEditing(true);
   };
 
   const handleInputFocus = fieldName => setInputActive({ ...isInputActive, [fieldName]: true });
@@ -217,7 +224,7 @@ const Comment = () => {
                     color={'#49da59'}
                     border={'#49da59'}
                     backcolor={'#49da59'}
-                    onClick={() => handleEditToggle(item)}
+                    onClick={() => handleEditToggle(item.id)}
                   >
                     수정
                   </S.Button>
