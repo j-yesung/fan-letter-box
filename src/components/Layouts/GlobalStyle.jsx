@@ -11,10 +11,9 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     background: ${({ theme }) => theme.bgColor};
     color: ${({ theme }) => theme.textColor};
-    border: 2px solid ${({ theme }) => theme.borderColor};
     gap: 10px;
     width: 100%;
-    height: 100vh;
+    height: 110vw;
     flex-direction: column;
     font-family: 'RixInooAriDuriR';
   }

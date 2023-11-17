@@ -62,7 +62,6 @@ const Header = () => {
       dispatch(isMode(lightTheme));
     }
   };
-  console.log(lightTheme);
 
   return (
     <HEADER_BOX>
