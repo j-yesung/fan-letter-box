@@ -27,14 +27,13 @@ const ImgBox = styled.div`
 
 const MemberInfo = () => {
   const fanLetter = useSelector(state => state.fanLetter);
-  console.log('fanLetter: ', fanLetter);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 민지 디폴트
   useEffect(() => {
     dispatch(isActive('1'));
-  }, []);
+  }, [dispatch]);
 
   const goToContentPage = item => {
     dispatch(isActive(item.id));
