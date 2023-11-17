@@ -1,6 +1,7 @@
 export const GET_JSON_DATA = 'fanLetter/JSON_DATA';
 export const SELECTED_DATA = 'fanLetter/SELECTED_DATA';
 export const ACTIVE_IMG = 'fanLetter/ACTIVE_IMG';
+export const THEME_MODE = 'fanLetter/THEME_MODE';
 
 export const getJsonData = payload => ({
   type: GET_JSON_DATA,
@@ -14,11 +15,16 @@ export const isActive = payload => ({
   type: ACTIVE_IMG,
   payload,
 });
+export const isMode = payload => ({
+  type: THEME_MODE,
+  payload,
+});
 
 const initialState = {
   data: [],
   selectedData: null,
   isActive: null,
+  isMode: null,
 };
 
 const fanLetter = (state = initialState, action) => {
@@ -37,6 +43,11 @@ const fanLetter = (state = initialState, action) => {
       return {
         ...state,
         isActive: action.payload,
+      };
+    case THEME_MODE:
+      return {
+        ...state,
+        isMode: action.payload,
       };
     default:
       return state;
