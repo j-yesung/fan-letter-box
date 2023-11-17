@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedData } from 'modules/fanLetter';
+import { isActive, selectedData } from 'modules/fanLetter';
 
 const HeaderBox = styled.header`
   @font-face {
@@ -15,10 +15,15 @@ const HeaderBox = styled.header`
   color: #000000;
   margin: 20px;
 `;
-const HomeButton = styled.button`
+const HomeButton = styled.div`
   position: absolute;
+  cursor: pointer;
   left: 100px;
   top: 30px;
+  width: 30px;
+  height: 30px;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/60/60817.png');
+  background-size: cover;
 `;
 
 const Header = () => {
@@ -27,17 +32,16 @@ const Header = () => {
   const navigate = useNavigate();
 
   const goToHomePage = () => {
+    dispatch(isActive('1'));
     dispatch(selectedData(fanLetter.data[0]));
     navigate('/');
   };
 
   return (
-    <>
-      <HeaderBox>
-        <HomeButton onClick={goToHomePage}>홈으로 이동</HomeButton>
-        New Jeans
-      </HeaderBox>
-    </>
+    <HeaderBox>
+      <HomeButton onClick={goToHomePage}></HomeButton>
+      New Jeans
+    </HeaderBox>
   );
 };
 
