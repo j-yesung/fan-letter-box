@@ -5,14 +5,14 @@ import * as S from './style/Comment.styled.js';
 import { useSelector } from 'react-redux';
 
 // 날짜 포맷팅
-export const formattedDate = () => {
-  var date = new Date();
+const formattedDate = () => {
+  let date = new Date();
 
-  var hours = date.getHours();
-  var amps = hours >= 12 ? '오후' : '오전';
+  let hours = date.getHours();
+  let amps = hours >= 12 ? '오후' : '오전';
   hours = hours % 12;
 
-  var formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(
+  let formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(
     date.getDate(),
   ).padStart(2, '0')}. `;
   formattedDate += `${amps} ${String(hours).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
