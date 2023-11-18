@@ -91,12 +91,12 @@ export const Button = styled.button`
   font-size: 16px;
   height: 36px;
   margin-left: 10px;
-  border: 2px solid ${props => props.buttonColor};
+  border: 2px solid ${props => props.buttoncolor};
   color: #fff;
-  background-color: ${props => props.buttonColor};
+  background-color: ${props => props.buttoncolor};
   &:hover {
     background: 0 0;
-    color: ${props => props.buttonColor};
+    color: ${props => props.buttoncolor};
   }
 `;
 // 댓글 뿌리는 영역

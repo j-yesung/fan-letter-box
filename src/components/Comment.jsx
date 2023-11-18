@@ -159,7 +159,7 @@ const Comment = () => {
             <S.Placeholder $isActive={isInputActive.content}>내용</S.Placeholder>
           </S.TEXT_BOX>
           <S.ButtonWrap>
-            <S.Button buttonColor={'#42adff'} onClick={handleClickAddComment}>
+            <S.Button buttoncolor={'#42adff'} onClick={handleClickAddComment}>
               등록
             </S.Button>
           </S.ButtonWrap>
@@ -191,19 +191,19 @@ const Comment = () => {
               </S.LiLabel>
               {isEditing === item.isEditing ? (
                 <S.ButtonWrap>
-                  <S.Button buttonColor={'#ff4742'} onClick={() => handleDeleteComment(item.id)}>
+                  <S.Button buttoncolor={'#ff4742'} onClick={() => handleDeleteComment(item.id)}>
                     삭제
                   </S.Button>
-                  <S.Button buttonColor={'#49da59'} onClick={() => handleUpdateComment(item.id)}>
+                  <S.Button buttoncolor={'#49da59'} onClick={() => handleUpdateComment(item.id)}>
                     수정 완료
                   </S.Button>
                 </S.ButtonWrap>
               ) : (
                 <S.ButtonWrap>
-                  <S.Button buttonColor={'#ff4742'} onClick={() => handleDeleteComment(item.id)}>
+                  <S.Button buttoncolor={'#ff4742'} onClick={() => handleDeleteComment(item.id)}>
                     삭제
                   </S.Button>
-                  <S.Button buttonColor={'#49da59'} onClick={() => handleEditToggle(item.id)}>
+                  <S.Button buttoncolor={'#49da59'} onClick={() => handleEditToggle(item.id)}>
                     수정
                   </S.Button>
                 </S.ButtonWrap>
