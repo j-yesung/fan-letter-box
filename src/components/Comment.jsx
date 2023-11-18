@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment, deleteComment, getLocalCommentData } from 'modules/comment.js';
 
 // 날짜 포맷팅
 const formattedDate = () => {
@@ -36,20 +37,22 @@ const Comment = () => {
   const contentRef = useRef();
   const editContentRef = useRef();
 
-  const selectedData = useSelector(state => state.fanLetter.selectedData);
+  const dispatch = useDispatch();
+  const selectedData = useSelector(state => state.fanLetter.selectedData); // select option data
+  const comments = useSelector(state => state.comment.comments); // comments data
 
   // 로컬 스토리지 데이터 불러오기
   useEffect(() => {
     const savedComment = localStorage.getItem(`comment_${paramId}`);
     if (savedComment) {
-      setComment(JSON.parse(savedComment));
+      dispatch(getLocalCommentData(JSON.parse(savedComment)));
     }
-  }, [paramId]);
+  }, [dispatch, paramId]);
 
   // 로컬 스토리지 데이터 저장하기
   useEffect(() => {
-    localStorage.setItem(`comment_${paramId}`, JSON.stringify(comment));
-  }, [paramId, comment]);
+    localStorage.setItem(`comment_${paramId}`, JSON.stringify(comments));
+  }, [comments, paramId]);
 
   // 등록
   const handleClickAddComment = () => {
@@ -69,7 +72,7 @@ const Comment = () => {
         isEditing: false,
       };
 
-      setComment(prevComment => [...prevComment, newComment]);
+      dispatch(addComment(newComment));
 
       nameRef.current.value = '';
       contentRef.current.value = '';
@@ -98,8 +101,13 @@ const Comment = () => {
     }
   };
 
-  // 삭제
-  const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
+  // 삭제 (리덕스 적용)
+  const handleDeleteComment = id => {
+    dispatch(deleteComment(id));
+  };
+
+  // 삭제 원본 코드
+  // const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
 
   // 수정
   const handleEditToggle = id => {
@@ -167,7 +175,7 @@ const Comment = () => {
       </S.FORM_WRAPPER>
 
       <S.Ul>
-        {comment.map(item => (
+        {comments.map(item => (
           <div key={item.id}>
             <S.Li>
               <S.UserIcon src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" />
