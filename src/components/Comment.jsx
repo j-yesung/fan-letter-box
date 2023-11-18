@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, deleteComment, getLocalCommentData } from 'modules/comment.js';
+import { addComment, deleteComment, editComment, getLocalCommentData, updateComment } from 'modules/comment.js';
+import { setInputActive } from 'modules/input.js';
 
 // 날짜 포맷팅
 const formattedDate = () => {
@@ -23,23 +24,29 @@ const formattedDate = () => {
   return formattedDate;
 };
 
+// 인풋 길이 체크
+const validateInput = (targetRef, maxLength) => {
+  if (targetRef.current.value.length > maxLength) {
+    alert(`${maxLength}글자 이하로 작성해 주세요.`);
+    return false;
+  }
+  return true;
+};
+
 const Comment = () => {
   const param = useParams();
+  const dispatch = useDispatch();
+
   const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id);
-  const [comment, setComment] = useState([]);
   const [isEditing, setIsEditing] = useState(true);
-  const [isInputActive, setInputActive] = useState({
-    name: false,
-    content: false,
-  });
 
   const nameRef = useRef();
   const contentRef = useRef();
   const editContentRef = useRef();
 
-  const dispatch = useDispatch();
   const selectedData = useSelector(state => state.fanLetter.selectedData); // select option data
   const comments = useSelector(state => state.comment.comments); // comments data
+  const isInputActive = useSelector(state => state.input.isInputActive);
 
   // 로컬 스토리지 데이터 불러오기
   useEffect(() => {
@@ -74,65 +81,45 @@ const Comment = () => {
 
       dispatch(addComment(newComment));
 
-      nameRef.current.value = '';
-      contentRef.current.value = '';
+      name.value = '';
+      content.value = '';
     } else {
       return alert('이름을 다시 선택해 주세요.');
     }
   };
 
-  // TEXT 감지해서 등록 및 수정
   const handleChangeText = e => {
     switch (e.target.name) {
       case 'name':
-        if (e.target.value.length > 20) return alert('20글자 이하로 작성해 주세요.');
-        nameRef.current.value = e.target.value;
+        if (!validateInput(nameRef, 20)) return;
         break;
       case 'content':
-        if (e.target.value.length > 100) return alert('100글자 이하로 작성해 주세요.');
-        contentRef.current.value = e.target.value;
+        if (!validateInput(contentRef, 100)) return;
         break;
       case 'editContent':
-        if (e.target.value > 100) return alert('100글자 이하로 작성해 주세요.');
-        editContentRef.current.value = e.target.value;
+        if (!validateInput(editContentRef, 100)) return;
         break;
       default:
         break;
     }
   };
 
-  // 삭제 (리덕스 적용)
-  const handleDeleteComment = id => {
-    dispatch(deleteComment(id));
-  };
-
-  // 삭제 원본 코드
-  // const handleDeleteComment = id => setComment(prevComment => prevComment.filter(comment => comment.id !== id));
-
+  // 삭제
+  const handleDeleteComment = id => dispatch(deleteComment(id));
   // 수정
-  const handleEditToggle = id => {
-    setComment(prevComments =>
-      prevComments.map(commentItem =>
-        commentItem.id === id ? { ...commentItem, isEditing: !commentItem.isEditing } : commentItem,
-      ),
-    );
-  };
-
+  const handleEditToggle = id => dispatch(editComment(id));
   // 수정 완료
   const handleUpdateComment = id => {
-    const updateComment = comment.map(item =>
-      item.id === id
-        ? { ...item, content: editContentRef.current.value, date: formattedDate(), isEditing: false }
-        : item,
-    );
-    setComment(updateComment);
+    const updateContent = editContentRef.current.value;
+    const updateDate = formattedDate();
+    dispatch(updateComment(id, updateContent, updateDate));
   };
-
-  const handleInputFocus = fieldName => setInputActive({ ...isInputActive, [fieldName]: true });
-  const handleInputBlur = (e, fieldName) =>
-    !e.target.value
-      ? setInputActive({ ...isInputActive, [fieldName]: false })
-      : setInputActive({ ...isInputActive, [fieldName]: true });
+  // 인풋 애니메이션
+  const handleInputFocus = fieldName => dispatch(setInputActive(fieldName, true));
+  const handleInputBlur = (e, fieldName) => {
+    const isActive = !!e.target.value;
+    dispatch(setInputActive(fieldName, isActive));
+  };
 
   return (
     <>
