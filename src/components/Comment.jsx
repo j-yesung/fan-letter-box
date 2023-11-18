@@ -181,7 +181,6 @@ const Comment = () => {
                     ref={editContentRef}
                     key={item.id}
                     name="editContent"
-                    placeholder="내용"
                     maxLength="100"
                     defaultValue={item.content}
                     onChange={handleChangeText}

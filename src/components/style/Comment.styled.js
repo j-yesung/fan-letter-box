@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 export const FORM_WRAPPER = styled.div`
   display: flex;
