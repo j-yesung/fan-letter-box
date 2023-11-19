@@ -30,7 +30,6 @@ const MemberInfo = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 민지 디폴트
   useEffect(() => {
     dispatch(isActive('1'));
   }, [dispatch]);

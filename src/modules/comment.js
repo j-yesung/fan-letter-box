@@ -80,6 +80,7 @@ const comment = (state = initialState, action) => {
               isEditing: false,
             };
           }
+          return comment;
         }),
       };
     case DELETE_COMMENT:

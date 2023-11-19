@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as S from './style/Comment.styled.js';
@@ -35,18 +35,18 @@ const validateInput = (targetRef, maxLength) => {
 
 const Comment = () => {
   const param = useParams();
-  const dispatch = useDispatch();
-
   const paramId = isNaN(parseInt(param.id)) ? 1 : parseInt(param.id);
-  const [isEditing, setIsEditing] = useState(true);
 
+  // DOM 선택
   const nameRef = useRef();
   const contentRef = useRef();
   const editContentRef = useRef();
 
-  const selectedData = useSelector(state => state.fanLetter.selectedData); // select option data
-  const comments = useSelector(state => state.comment.comments); // comments data
+  // 상태 가져오기
+  const selectedData = useSelector(state => state.fanLetter.selectedData);
+  const comments = useSelector(state => state.comment.comments);
   const isInputActive = useSelector(state => state.input.isInputActive);
+  const dispatch = useDispatch();
 
   // 로컬 스토리지 데이터 불러오기
   useEffect(() => {
@@ -170,8 +170,7 @@ const Comment = () => {
                 <p>{item.name}</p>
                 <p>{item.date}</p>
 
-                {isEditing === item.isEditing ? (
-                  // 수정할 때..
+                {item.isEditing ? (
                   <S.UpdateTextArea
                     ref={editContentRef}
                     key={item.id}
@@ -184,7 +183,7 @@ const Comment = () => {
                   <p>{item.content}</p>
                 )}
               </S.LiLabel>
-              {isEditing === item.isEditing ? (
+              {item.isEditing ? (
                 <S.ButtonWrap>
                   <S.Button buttoncolor={'#ff4742'} onClick={() => handleDeleteComment(item.id)}>
                     삭제

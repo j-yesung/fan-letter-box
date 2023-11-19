@@ -1,4 +1,4 @@
-import { selectedData as selectDataAtion } from 'modules/fanLetter';
+import { selectedData as selectDataAction } from 'modules/fanLetter';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,11 +11,11 @@ const Select = () => {
     const selectedData = fanLatter.data.find(item => item.name === selectedName);
     console.log('selectedData: ', selectedData);
 
-    dispatch(selectDataAtion(selectedData));
+    dispatch(selectDataAction(selectedData));
   };
 
   useEffect(() => {
-    if (fanLatter.data.length) dispatch(selectDataAtion(fanLatter.data[0]));
+    if (fanLatter.data.length) dispatch(selectDataAction(fanLatter.data[0]));
   }, [fanLatter.data, dispatch]);
 
   return (
