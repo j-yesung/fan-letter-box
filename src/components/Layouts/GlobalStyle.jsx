@@ -13,7 +13,6 @@ const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.textColor};
     gap: 10px;
     width: 100%;
-    height: 110vw;
     flex-direction: column;
     font-family: 'RixInooAriDuriR';
   }
