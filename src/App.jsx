@@ -15,10 +15,6 @@ const App = () => {
     dispatch(getJsonData(fakeData));
   }, [dispatch]);
 
-  if (window.location.href.indexOf('/fan-letter-box/') !== -1) {
-    window.location.href = '/fan-letter-box/';
-  }
-
   return (
     <>
       <ThemeProvider theme={fanLetter.isMode || lightTheme}>
